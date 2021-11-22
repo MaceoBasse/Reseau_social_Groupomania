@@ -48,6 +48,7 @@
                 class="input"
                 v-model="user"
               />
+              <p v-if="user_error" class="text-red-500">{{ user_error }}</p>
             </div>
             <div class="group">
               <label for="pass" class="label">Password</label>
@@ -58,6 +59,9 @@
                 data-type="password"
                 v-model="password"
               />
+              <p v-if="password_error" class="text-red-500">
+                {{ password_error }}
+              </p>
             </div>
             <div class="group">
               <label for="pass" class="label">Repeat Password</label>
@@ -68,6 +72,9 @@
                 data-type="password"
                 v-model="password_repeat"
               />
+              <p v-if="password_repeat_error" class="text-red-500">
+                {{ password_repeat_error }}
+              </p>
             </div>
             <div class="group">
               <label for="pass" class="label">Email</label>
@@ -77,6 +84,9 @@
                 class="input"
                 v-model="email_signup"
               />
+              <p v-if="email_signup_error" class="text-red-500">
+                {{ email_signup_error }}
+              </p>
             </div>
             <div class="group">
               <input type="submit" class="button" value="Inscription" />
@@ -93,6 +103,7 @@
 </template>
 
 <script>
+import validator from "validator";
 export default {
   // name: "App",
   data() {
@@ -105,43 +116,60 @@ export default {
       password: "",
       password_repeat: "",
       email_signup: "",
+      //signup error
+      user_error: "",
+      password_error: "",
+      password_repeat_error: "",
+      email_signup_error: "",
     };
   },
   computed: {
-    signUpValidate() {
-      const { user, password, password_repeat, email_signup } = this;
-      console.log(
-        this.user,
-        this.password,
-        this.password_repeat,
-        this.email_signup
-      );
-      return (
-        user.length > 0 &&
-        password.length > 0 &&
-        password_repeat.length > 0 &&
-        email_signup.length > 0 &&
-        password == password_repeat
-      );
-    },
     signInValidate() {
       const { email, pass } = this;
       return email.length > 0 && pass.length > 0;
     },
   },
   methods: {
+    signUpValidate() {
+      this.user_error = "";
+      this.password_error = "";
+      this.password_repeat_error = "";
+      this.email_signup_error = "";
+      const { user, password, password_repeat, email_signup } = this;
+      if (validator.isEmpty(user)) {
+        console.log("Il faut ecrire un nom utilisateur");
+        this.user_error = "Il faut ecrire un nom utilisateur";
+        this.user = "";
+        return false;
+      }
+      if (!validator.isStrongPassword(password)) {
+        console.log("Password n'est pas valide");
+        this.password_error = "Password n'est pas valide";
+        this.password = "";
+        return false;
+      }
+      if (password !== password_repeat) {
+        console.log("Le second password n'est pas valide");
+        this.password_repeat_error = "Le second password n'est pas valide";
+        this.password_repeat = "";
+        return false;
+      }
+      if (!validator.isEmail(email_signup)) {
+        console.log("Email n'est pas valide");
+        this.email_signup_error = "L'email n'est pas valide";
+        this.email_signup = "";
+        return false;
+      }
+
+      return true;
+    },
     onReset() {
       this.email = "";
       this.pass = "";
-      this.password_repeat = "";
-      this.password = "";
-      this.user = "";
-      this.email_signup = "";
     },
 
     submit() {
       if (!this.signInValidate) {
-        this.onReset();
         return;
       }
       console.log(this.email);
@@ -168,10 +196,10 @@ export default {
         });
     },
     sign_up() {
-      if (!this.signUpValidate) {
-        this.onReset();
+      if (!this.signUpValidate()) {
         return;
       }
+      console.log("signup");
       const option = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -208,12 +236,12 @@ export default {
               this.$router.push("home");
 
               if (data.error) {
-                alert(data.error);
+                console.log(data.error);
               }
             });
 
           if (data.error) {
-            alert(data.error);
+            this.email_signup_error = data.error;
           }
         });
     },
@@ -237,9 +265,9 @@ export default {
         });
     },
   },
-   beforeMount(){
-    this.guardMyroute()
- },
+  beforeMount() {
+    this.guardMyroute();
+  },
 };
 </script>
 
