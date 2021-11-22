@@ -22,6 +22,7 @@
                 class="input"
                 v-model="email"
               />
+              <p v-if="email_error" class="text-red-500">{{ email_error }}</p>
             </div>
             <div class="group">
               <label for="pass" class="label">Password</label>
@@ -32,6 +33,7 @@
                 data-type="password"
                 v-model="pass"
               />
+              <p v-if="pass_error" class="text-red-500">{{ pass_error }}</p>
             </div>
             <div class="group">
               <input type="submit" class="button" value="Connexion" />
@@ -111,6 +113,10 @@ export default {
       //login
       email: "",
       pass: "",
+      //login error
+      email_error: "",
+      pass_error: "",
+
       //sign up
       user: "",
       password: "",
@@ -123,13 +129,25 @@ export default {
       email_signup_error: "",
     };
   },
-  computed: {
-    signInValidate() {
-      const { email, pass } = this;
-      return email.length > 0 && pass.length > 0;
-    },
-  },
   methods: {
+    signInValidate() {
+      this.email_error = "";
+      this.pass_error = "";
+      const { email, pass } = this;
+      if (!validator.isEmail(email)) {
+        console.log("Email n'est pas valide");
+        this.email_error = "L'email n'est pas valide";
+        this.email = "";
+        return false;
+      }
+      if (!validator.isStrongPassword(pass)) {
+        console.log("Le password n'est pas valide");
+        this.pass_error = "Le password n'est pas valide";
+        this.pass = "";
+        return false;
+      }
+      return true;
+    },
     signUpValidate() {
       this.user_error = "";
       this.password_error = "";
@@ -137,25 +155,21 @@ export default {
       this.email_signup_error = "";
       const { user, password, password_repeat, email_signup } = this;
       if (validator.isEmpty(user)) {
-        console.log("Il faut ecrire un nom utilisateur");
         this.user_error = "Il faut ecrire un nom utilisateur";
         this.user = "";
         return false;
       }
       if (!validator.isStrongPassword(password)) {
-        console.log("Password n'est pas valide");
         this.password_error = "Password n'est pas valide";
         this.password = "";
         return false;
       }
       if (password !== password_repeat) {
-        console.log("Le second password n'est pas valide");
         this.password_repeat_error = "Le second password n'est pas valide";
         this.password_repeat = "";
         return false;
       }
       if (!validator.isEmail(email_signup)) {
-        console.log("Email n'est pas valide");
         this.email_signup_error = "L'email n'est pas valide";
         this.email_signup = "";
         return false;
@@ -163,13 +177,9 @@ export default {
 
       return true;
     },
-    onReset() {
-      this.email = "";
-      this.pass = "";
-    },
 
     submit() {
-      if (!this.signInValidate) {
+      if (!this.signInValidate()) {
         return;
       }
       console.log(this.email);
@@ -190,9 +200,8 @@ export default {
           this.$router.push("home");
 
           if (data.error) {
-            alert(data.error);
+            this.pass_error = data.error;
           }
-          this.onReset();
         });
     },
     sign_up() {
