@@ -3,7 +3,40 @@
     <Navbar />
     <main class="px-5 py-3 sm:mt-0 mt-20">
       <div class="container mx-auto">
-        <h2 class="text-center text-xl">Setting</h2>
+        <div
+          class="
+            flex flex-col
+            items-center
+            justify-center
+            bg-white
+            p-4
+            shadow
+            rounded-lg
+          "
+        >
+          <div
+            class="
+              inline-flex
+              shadow-lg
+              border border-gray-200
+              rounded-full
+              overflow-hidden
+              h-40
+              w-40
+            "
+          >
+            <img :src="user_info.pictureurl" alt="" class="h-full w-full" />
+          </div>
+
+          <h2 class="mt-4 font-bold text-xl">{{ user_info.name }}</h2>
+          <h6 class="mt-2 text-sm font-medium" v-if="user_info.isadmin == 1">
+            Admin
+          </h6>
+
+          <p class="text-xs text-gray-500 text-center mt-3">
+            {{ user_info.outline }}
+          </p>
+        </div>
       </div>
 
       <div class="max-w-2xl bg-white py-10 px-5 m-auto w-full mt-10">
@@ -38,7 +71,16 @@
       </div>
 
       <div
-        class="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg mt-5 mb-5"
+        class="
+          max-w-md
+          mx-auto
+          bg-white
+          rounded-lg
+          overflow-hidden
+          md:max-w-lg
+          mt-5
+          mb-5
+        "
       >
         <div class="md:flex">
           <div class="w-full">
@@ -47,7 +89,7 @@
                 >Modifier la photo de profil</span
               >
             </div>
-            <div class="p-3">
+            <div class="p-3 z-0">
               <div class="mb-2">
                 <span>Image</span>
                 <div
@@ -63,7 +105,7 @@
                     hover:cursor-pointer
                   "
                 >
-                  <div class="absolute">
+                  <div class="absolute ">
                     <div class="flex flex-col items-center" v-if="image == ''">
                       <i
                         class="fas fa-cloud-upload-alt fa-3x text-gray-200"
@@ -261,6 +303,7 @@ export default {
       image: "",
       oldPass: "",
       newPass: "",
+      user_info: "",
     };
   },
   components: {
@@ -284,6 +327,7 @@ export default {
         .then((data) => {
           console.log(data);
           this.outline = "";
+          this.getCurrentUser();
           if (data.error) {
             console.log(data.error);
             this.outline = "";
@@ -313,6 +357,7 @@ export default {
           console.log(data);
           this.sucess = true;
           this.image = "";
+          this.getCurrentUser();
           if (data.error) {
             console.log(data.error);
             this.image = "";
@@ -350,6 +395,18 @@ export default {
         })
         .then((data) => {
           this.user = data;
+          fetch(`http://localhost:3000/api/user/${this.user.userId}`, option)
+            .then((response) => response.json())
+            .catch((error) => {
+              console.error("There was an error!", error);
+            })
+            .then((data) => {
+              this.user_info = data;
+              console.log(this.user_info);
+              if (data.error) {
+                console.log(data.error);
+              }
+            });
           if (data.error) {
             console.log(data.error);
           }

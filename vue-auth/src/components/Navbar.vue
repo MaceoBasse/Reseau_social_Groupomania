@@ -18,7 +18,7 @@
     />
     <aside>
       <nav
-        class="fixed bottom-0 bg-blue-200 sm:static sm:bg-transparent w-full"
+        class="fixed bottom-0 bg-blue-200 sm:static sm:bg-transparent w-full z-10"
       >
         <ul class="flex items-center sm:flex-col sm:items-stretch">
           <li class="flex-1">
