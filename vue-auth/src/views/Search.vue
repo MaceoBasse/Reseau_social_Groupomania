@@ -9,7 +9,11 @@
           <div v-if="user.length == 0">
             <p class="text-center">Nous n'avons pas trouvé d'utilisateurs</p>
           </div>
-          <div v-for="(users, index) in user" :key="index">
+          <div
+            @click="GetPostUser(users.id)"
+            v-for="(users, index) in user"
+            :key="index"
+          >
             <div
               class="
                 each
@@ -97,6 +101,24 @@ export default {
             }
           });
       }
+    },
+    GetPostUser(userId) {
+      console.log(userId);
+      const option = {
+        method: "GET",
+        credentials: "include",
+      };
+      fetch(`http://localhost:3000/api/user/${userId}/posts`, option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          console.log(data);
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
     },
   },
   beforeMount() {

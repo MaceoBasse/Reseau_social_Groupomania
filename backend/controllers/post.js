@@ -33,9 +33,6 @@ exports.newPost = (req, res, next) => {
 /**
  * Récupération de tous les posts, avec commentaires et likes/dislikes
  */
-// Fonction utilitaire : Récupérer les commentaires des posts
-// posts est un ARRAY de posts (sans commentaires)
-// connection : est la connection déjà ouverte précédemment
 exports.getCommentsOfEachPosts = (posts, connection) => {
   return Promise.all(posts.map(post => {
     const sql = "SELECT Comments.id AS commentId, Comments.publication_date AS commentDate, Comments.content As commentContent, Users.id AS userId, Users.name AS userName, Users.pictureurl AS userPicture\
