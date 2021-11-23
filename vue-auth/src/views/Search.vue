@@ -123,7 +123,7 @@
                 ></a>
               </div>
             </div>
-            <!-- <div
+            <div
               v-show="showComment"
               v-for="(comment, i) in post.comments"
               :key="i"
@@ -201,8 +201,8 @@
                   </div>
                 </div>
               </div>
-            </div> -->
-            <!-- <div
+            </div>
+            <div
               class="
                 flex
                 mx-auto
@@ -266,7 +266,7 @@
                   </div>
                 </div>
               </form>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -287,7 +287,11 @@ export default {
       users: ref([]),
       showUserPost: false,
       posts: ref([]),
+      postId: "",
+      comment: "",
+      showComment: false,
       user: [],
+      userId: "",
     };
   },
   components: {
@@ -356,6 +360,7 @@ export default {
           .then((data) => {
             console.log(data);
             this.posts = data.posts;
+            this.userId = userId;
             if (data.error) {
               console.log(data.error);
             }
@@ -375,7 +380,68 @@ export default {
         })
         .then((data) => {
           console.log(data);
-          this.getAllPost();
+          this.GetPostUser(this.userId);
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
+    },
+    Like(postId, like) {
+      const option = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId, rate: like }),
+        credentials: "include",
+      };
+      fetch("http://localhost:3000/api/like", option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          this.GetPostUser(this.userId);
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
+    },
+    addComment(postId) {
+      console.log(this.comment);
+      console.log(postId);
+      const option = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId, content: this.comment }),
+        credentials: "include",
+      };
+      fetch("http://localhost:3000/api/comment", option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          console.log(data);
+          this.GetPostUser(this.userId);
+          this.comment = "";
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
+    },
+    deleteComment(commentId) {
+      console.log(commentId);
+      const option = {
+        method: "DELETE",
+        credentials: "include",
+      };
+      fetch(`http://localhost:3000/api/comment/${commentId}`, option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          console.log(data);
+          this.GetPostUser(this.userId);
           if (data.error) {
             console.log(data.error);
           }
