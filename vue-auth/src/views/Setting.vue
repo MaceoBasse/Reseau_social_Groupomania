@@ -25,7 +25,13 @@
               w-40
             "
           >
-            <img :src="user_info.pictureurl" alt="" class="h-full w-full" />
+            <img
+            v-if="user_info.pictureurl !== null"
+              :src="user_info.pictureurl"
+              alt="Photo de profil"
+              class="h-full w-full"
+            />
+            <i v-else class="fas fa-10x fa-user-circle text-gray-500"></i>
           </div>
 
           <h2 class="mt-4 font-bold text-xl">{{ user_info.name }}</h2>
@@ -105,7 +111,7 @@
                     hover:cursor-pointer
                   "
                 >
-                  <div class="absolute ">
+                  <div class="absolute">
                     <div class="flex flex-col items-center" v-if="image == ''">
                       <i
                         class="fas fa-cloud-upload-alt fa-3x text-gray-200"
@@ -434,11 +440,12 @@ export default {
           console.log(data);
           this.oldPass = "";
           this.newPass = "";
-
+          alert("Le mot de passe a été modfier");
           if (data.error) {
             console.log(data.error);
             this.oldPass = "";
             this.newPass = "";
+            alert("Le mot de passe a été modfier");
           }
         });
     },

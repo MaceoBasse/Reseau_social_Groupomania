@@ -34,7 +34,7 @@
                 <img
                   v-if="users.pictureurl !== null"
                   :src="users.pictureurl"
-                  alt="Img"
+                  alt="Photo de profil"
                   class="
                     h-8
                     w-8
@@ -50,11 +50,13 @@
                 <div class="flex">
                   <div class="name">{{ users.name }}</div>
                 </div>
-                <i class="fas fa-user-lock" @click="admin(users.id)"></i>
-                <i
-                  class="fas fa-user-slash ml-5"
-                  @click="Notadmin(users.id)"
-                ></i>
+                <div v-if="user.isadmin == 0">
+                  <i class="fas fa-user-lock" @click="admin(users.id)"></i>
+                  <i
+                    class="fas fa-user-slash ml-5"
+                    @click="Notadmin(users.id)"
+                  ></i>
+                </div>
               </div>
             </div>
           </div>
@@ -75,7 +77,7 @@
             <div class="md:flex-shrink-0">
               <img
                 :src="post.postImage"
-                alt="Post image"
+                alt="Image du post"
                 class="
                   w-full
                   h-64
@@ -93,7 +95,7 @@
                   <img
                     v-if="post.userPicture !== null"
                     :src="post.userPicture"
-                    alt="Img"
+                    alt="Photo de profil"
                     class="
                       h-8
                       w-8
@@ -189,7 +191,7 @@
                     <img
                       v-if="comment.userPicture !== null"
                       :src="comment.userPicture"
-                      alt="Img"
+                      alt="Photo de profil"
                       class="
                         h-8
                         w-8
@@ -470,6 +472,7 @@ export default {
           console.log(data);
           this.GetPostUser(this.userId);
           this.comment = "";
+          alert("Cet utilisateur devient admin");
           if (data.error) {
             console.log(data.error);
           }
@@ -492,6 +495,7 @@ export default {
           console.log(data);
           this.GetPostUser(this.userId);
           this.comment = "";
+          alert("Cet utilisateur n'est plus admin");
           if (data.error) {
             console.log(data.error);
           }

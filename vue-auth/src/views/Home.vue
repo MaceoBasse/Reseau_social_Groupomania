@@ -27,7 +27,7 @@
             <div class="md:flex-shrink-0">
               <img
                 :src="post.postImage"
-                alt="Post image"
+                alt="image du post"
                 class="
                   w-full
                   h-64
@@ -45,7 +45,7 @@
                   <img
                     v-if="this.user.pictureUrl !== null"
                     :src="this.user.pictureUrl"
-                    alt="Img"
+                    alt="Photo de profil"
                     class="
                       h-8
                       w-8
@@ -141,7 +141,7 @@
                     <img
                       v-if="comment.userPicture !== null"
                       :src="comment.userPicture"
-                      alt="Img"
+                      alt="Photo de profil"
                       class="
                         h-8
                         w-8
