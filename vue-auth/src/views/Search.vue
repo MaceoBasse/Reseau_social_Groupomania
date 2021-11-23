@@ -28,6 +28,7 @@
                 mx-auto
                 hover:bg-grey-400
               "
+              @click="showUserPost = !showUserPost"
             >
               <div class="sec self-center p-2 pr-1">
                 <img
@@ -54,6 +55,7 @@
           </div>
         </div>
       </div>
+      <div v-show="showUserPost"><p>Texte</p></div>
     </div>
   </div>
 </template>
@@ -68,6 +70,7 @@ export default {
       showSideBar: false,
       showSearch: false,
       users: ref([]),
+      showUserPost: false,
     };
   },
   components: {
@@ -95,7 +98,6 @@ export default {
           })
           .then((data) => {
             this.users = data;
-            console.log(this.users);
             if (data.error) {
               console.log(data.error);
             }
@@ -103,7 +105,6 @@ export default {
       }
     },
     GetPostUser(userId) {
-      console.log(userId);
       const option = {
         method: "GET",
         credentials: "include",
@@ -113,6 +114,7 @@ export default {
         .catch((error) => {
           console.error("There was an error!", error);
         })
+
         .then((data) => {
           console.log(data);
           if (data.error) {
