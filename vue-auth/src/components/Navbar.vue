@@ -307,7 +307,6 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
           this.notifications = data;
 
           if (data.error) {

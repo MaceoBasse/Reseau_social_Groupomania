@@ -48,8 +48,13 @@
               </div>
               <div class="sec self-center p-2 w-64">
                 <div class="flex">
-                  <div class="name text-sm">{{ users.name }}</div>
+                  <div class="name">{{ users.name }}</div>
                 </div>
+                <i class="fas fa-user-lock" @click="admin(users.id)"></i>
+                <i
+                  class="fas fa-user-slash ml-5"
+                  @click="Notadmin(users.id)"
+                ></i>
               </div>
             </div>
           </div>
@@ -320,6 +325,7 @@ export default {
           })
           .then((data) => {
             this.users = data;
+            console.log(this.users);
             if (data.error) {
               console.log(data.error);
             }
@@ -442,6 +448,50 @@ export default {
         .then((data) => {
           console.log(data);
           this.GetPostUser(this.userId);
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
+    },
+    admin(userId) {
+      console.log(userId);
+      const option = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isadmin: 1 }),
+        credentials: "include",
+      };
+      fetch(`http://localhost:3000/api/user/${userId}/admin`, option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          console.log(data);
+          this.GetPostUser(this.userId);
+          this.comment = "";
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
+    },
+    Notadmin(userId) {
+      console.log(userId);
+      const option = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isadmin: 0 }),
+        credentials: "include",
+      };
+      fetch(`http://localhost:3000/api/user/${userId}/admin`, option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          console.log(data);
+          this.GetPostUser(this.userId);
+          this.comment = "";
           if (data.error) {
             console.log(data.error);
           }
