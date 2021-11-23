@@ -114,13 +114,14 @@
               ></a>
             </button>
             <button class="relative">
-              <!-- <img
-                v-if="Object.keys(this.notifications).length !== 0"
+              <img
+                v-if="this.notification_length !== 0"
                 src="../assets/notification.png"
                 class="w-7"
                 @click="showNotif = !showNotif"
-              /> -->
+              />
               <i
+                v-else
                 class="fas fa-bell fa-lg h-5 w-6"
                 @click="showNotif = !showNotif"
               ></i>
@@ -175,7 +176,7 @@
           </div>
         </nav>
       </header>
-      <main class="px-5 py-3 z-10">
+      <main class="px-5 py-3 relative z-1">
         <div
           v-show="showNotif"
           v-for="(notification, i) in this.notifications"
@@ -249,6 +250,7 @@ export default {
       user: [],
       search: "",
       notifications: [],
+      notification_length: "",
     };
   },
   methods: {
@@ -308,7 +310,12 @@ export default {
         })
         .then((data) => {
           this.notifications = data;
-
+          console.log(this.notifications);
+          let keys = Object.keys(data);
+          for (let i = 0; i < keys.length; i++) {
+            let val = data[keys[i]];
+            this.notification_length = val.length;
+          }
           if (data.error) {
             console.log(data.error);
           }
