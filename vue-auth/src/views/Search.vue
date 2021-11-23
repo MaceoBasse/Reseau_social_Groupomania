@@ -50,7 +50,7 @@
                 <div class="flex">
                   <div class="name">{{ users.name }}</div>
                 </div>
-                <div v-if="user.isadmin == 0">
+                <div v-if="this.isAdmin == 1">
                   <i class="fas fa-user-lock" @click="admin(users.id)"></i>
                   <i
                     class="fas fa-user-slash ml-5"
@@ -70,7 +70,7 @@
         >
           <div class="bg-white shadow-2xl rounded-lg mb-6 tracking-wide">
             <i
-              v-if="post.userId == user.userId || user.isAdmin == 1"
+              v-if="post.userId == user.userId || this.isAdmin == 1"
               class="fas fa-times"
               @click="deletePost(post.postId)"
             ></i>
@@ -180,7 +180,7 @@
                           {{ comment.commentContent }}
                           <i
                             v-if="
-                              comment.userId == user.userId || user.isAdmin == 1
+                              comment.userId == user.userId || this.isAdmin
                             "
                             class="fas fa-times ml-5"
                             @click="deleteComment(comment.commentId)"
@@ -299,6 +299,7 @@ export default {
       showComment: false,
       user: [],
       userId: "",
+      isAdmin: "",
     };
   },
   components: {
@@ -348,6 +349,7 @@ export default {
         .then((data) => {
           this.user = data;
           console.log(this.user);
+          this.isAdmin = this.user.isAdmin
           if (data.error) {
             console.log(data.error);
           }
