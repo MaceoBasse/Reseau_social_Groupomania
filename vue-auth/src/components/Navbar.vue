@@ -18,7 +18,14 @@
     />
     <aside>
       <nav
-        class="fixed bottom-0 bg-blue-200 sm:static sm:bg-transparent w-full z-10"
+        class="
+          fixed
+          bottom-0
+          bg-blue-200
+          sm:static sm:bg-transparent
+          w-full
+          z-10
+        "
       >
         <ul class="flex items-center sm:flex-col sm:items-stretch">
           <li class="flex-1">
@@ -107,7 +114,16 @@
               ></a>
             </button>
             <button class="relative">
-              <i class="fas fa-bell fa-lg h-5 w-6"></i>
+              <!-- <img
+                v-if="Object.keys(this.notifications).length !== 0"
+                src="../assets/notification.png"
+                class="w-7"
+                @click="showNotif = !showNotif"
+              /> -->
+              <i
+                class="fas fa-bell fa-lg h-5 w-6"
+                @click="showNotif = !showNotif"
+              ></i>
             </button>
           </div>
           <div class="relative">
@@ -159,7 +175,65 @@
           </div>
         </nav>
       </header>
-      <main class="px-5 py-3"></main>
+      <main class="px-5 py-3 z-10">
+        <div
+          v-show="showNotif"
+          v-for="(notification, i) in this.notifications"
+          :key="i"
+        >
+          <div v-for="(notif, i) in notification" :key="i">
+            <div class="mb-4">
+              <div
+                class="
+                  flex
+                  max-w-sm
+                  w-full
+                  bg-white
+                  shadow-md
+                  rounded-lg
+                  overflow-hidden
+                  mx-auto
+                "
+              >
+                <div class="w-2 bg-green-600"></div>
+                <div class="w-full flex justify-between items-start px-2 py-2">
+                  <div class="flex flex-col ml-2">
+                    <label
+                      class="text-gray-800"
+                      v-if="notif.type == 'reaction'"
+                    >
+                      {{ notif.initiator }} a réagit votre post</label
+                    >
+                    <label class="text-gray-800" v-if="notif.type == 'comment'">
+                      {{ notif.initiator }} a commenté votre post</label
+                    >
+                    <label class="text-gray-800" v-if="notif.type == 'answer'">
+                      {{ notif.initiator }} a répondu votre commentaire</label
+                    >
+                  </div>
+
+                  <a @click="deleteNotif(notif.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 text-gray-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </section>
   </div>
 </template>
@@ -171,8 +245,10 @@ export default {
       showUserMenu: false,
       showSideBar: false,
       showSearch: false,
+      showNotif: false,
       user: [],
       search: "",
+      notifications: [],
     };
   },
   methods: {
@@ -218,11 +294,49 @@ export default {
       console.log(this.search);
       this.$router.push(`/search?user=${this.search}`);
       // window.location.reload(true);
-      
+    },
+
+    getNotif() {
+      const option = {
+        method: "GET",
+        credentials: "include",
+      };
+      fetch("http://localhost:3000/api/notif", option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          console.log(data);
+          this.notifications = data;
+
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
+    },
+    deleteNotif(notifId) {
+      console.log(notifId);
+      const option = {
+        method: "DELETE",
+        credentials: "include",
+      };
+      fetch(`http://localhost:3000/api/notif/${notifId}`, option)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("There was an error!", error);
+        })
+        .then((data) => {
+          this.getNotif();
+          if (data.error) {
+            console.log(data.error);
+          }
+        });
     },
   },
   beforeMount() {
     this.getCurrentUser();
+    this.getNotif();
   },
 };
 </script>

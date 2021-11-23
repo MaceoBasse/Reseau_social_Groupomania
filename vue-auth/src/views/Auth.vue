@@ -182,8 +182,6 @@ export default {
       if (!this.signInValidate()) {
         return;
       }
-      console.log(this.email);
-      console.log(this.pass);
       const option = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -208,7 +206,6 @@ export default {
       if (!this.signUpValidate()) {
         return;
       }
-      console.log("signup");
       const option = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
