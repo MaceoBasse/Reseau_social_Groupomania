@@ -26,6 +26,7 @@
             ></i>
             <div class="md:flex-shrink-0">
               <img
+                v-if="post.postImage"
                 :src="post.postImage"
                 alt="image du post"
                 class="
@@ -37,7 +38,10 @@
               />
             </div>
             <div class="px-4 py-2 mt-2">
-              <h2 class="font-bold text-2xl text-gray-800 tracking-normal">
+              <h2
+                class="font-bold text-2xl text-gray-800 tracking-normal"
+                v-if="post.postContent"
+              >
                 {{ post.postContent }}
               </h2>
               <div class="author flex items-center -ml-3 my-3">
