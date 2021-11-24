@@ -34,3 +34,4 @@ npm run serve
 ##### Utilisateur Admin avec les droits de modération :
 
 Email: admin@groupomania.com Mdp: &c3BA7SJq@Tb7CU$##qN!4hwhs5gYoso
+  
