@@ -1,4 +1,4 @@
-# vue-auth
+# groupomania
 
 ## Project setup
 ```
