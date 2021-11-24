@@ -246,6 +246,9 @@
                 required
                 autocomplete="current-password"
               />
+              <p v-if="newPass_error" class="text-red-500">
+                {{ newPass_error }}
+              </p>
             </div>
             <div class="flex items-center justify-between">
               <button
@@ -299,6 +302,7 @@
 
 <script>
 import Navbar from "../components/Navbar.vue";
+import validator from "validator";
 export default {
   data() {
     return {
@@ -309,6 +313,7 @@ export default {
       image: "",
       oldPass: "",
       newPass: "",
+      newPass_error: "",
       user_info: "",
     };
   },
@@ -418,7 +423,22 @@ export default {
           }
         });
     },
+    passwordValidate() {
+      this.newPass_error = "";
+      const { newPass } = this;
+      if (!validator.isStrongPassword(newPass)) {
+        console.log("érreur");
+        this.newPass_error =
+          "Le mot de passe doit contenir 8 caractères, 1 majuscule,1 minuscule et 1 caracatére spéciale";
+        this.newPass = "";
+        return false;
+      }
+      return true;
+    },
     changePassword() {
+      if (!this.passwordValidate()) {
+        return;
+      }
       const option = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -440,11 +460,9 @@ export default {
           console.log(data);
           this.oldPass = "";
           this.newPass = "";
-          alert("Le mot de passe a été modfier");
           if (data.error) {
-            console.log(data.error);
-            this.oldPass = "";
-            this.newPass = "";
+            this.newPass_error = data.error;
+          } else {
             alert("Le mot de passe a été modfier");
           }
         });
