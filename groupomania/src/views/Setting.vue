@@ -26,7 +26,7 @@
             "
           >
             <img
-            v-if="user_info.pictureurl !== null"
+              v-if="user_info.pictureurl !== null"
               :src="user_info.pictureurl"
               alt="Photo de profil"
               class="h-full w-full"
@@ -146,7 +146,7 @@
                     >Type de fichier accepté : .png .jpg .gif uniquement</span
                   >
                   <span class="flex items-center"
-                    ><i class="fa fa-lock mr-1"></i> sécurise</span
+                    ><i class="fa fa-lock mr-1"></i> sécurisé</span
                   >
                 </div>
               </div>
@@ -164,7 +164,7 @@
                     hover:bg-blue-700
                   "
                 >
-                  Créer
+                  Modifier
                 </button>
               </div>
             </div>
