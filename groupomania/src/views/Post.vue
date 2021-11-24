@@ -129,6 +129,9 @@
                       ><i class="fa fa-lock mr-1"></i> sécurise</span
                     >
                   </div>
+                  <p v-if="post_error" class="text-red-500 text-center">
+                    {{ post_error }}
+                  </p>
                 </div>
                 <div class="mt-3 text-center pb-3">
                   <button
@@ -166,6 +169,7 @@ export default {
       showSearch: false,
       title: "",
       image: "",
+      post_error: "",
       sucess: false,
     };
   },
@@ -181,6 +185,7 @@ export default {
       this.image = event.target.files[0];
     },
     createPost() {
+      this.post_error = "";
       console.log(this.image);
       const formData = new FormData();
       formData.append("content", this.title);
@@ -198,11 +203,12 @@ export default {
         })
         .then((data) => {
           console.log(data);
-          this.sucess = true;
           this.formReset();
           if (data.error) {
             console.log(data.error);
-            this.formReset();
+            this.post_error = data.error;
+          } else {
+            this.sucess = true;
           }
         });
     },
