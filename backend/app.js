@@ -6,10 +6,6 @@ const fs = require('fs');
 const morgan = require('morgan');
 const helmet = require('helmet');
 
-// DEVELOPEMENT : Pour le log !
-const Cookies = require('cookies');
-const cryptojs = require('crypto-js');
-
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
