@@ -206,6 +206,7 @@ export default {
             this.post_error = data.error;
           } else {
             this.sucess = true;
+            this.$router.push("home");
           }
         });
     },
