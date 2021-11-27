@@ -19,7 +19,6 @@ function guardMyroute(to, from, next) {
     .then((data) => {
       next();
       if (data.error) {
-        console.log(data.error);
         router.push("/");
       }
     });

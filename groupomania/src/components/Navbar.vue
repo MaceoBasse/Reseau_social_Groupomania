@@ -266,11 +266,9 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.$router.push("/");
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
     getCurrentUser() {
@@ -286,16 +284,10 @@ export default {
         })
         .then((data) => {
           this.user = data;
-          //   console.log(this.user);
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     searchUser() {
-      console.log(this.search);
       this.$router.push(`/search?user=${this.search}`);
-      // window.location.reload(true);
     },
 
     getNotif() {
@@ -310,19 +302,14 @@ export default {
         })
         .then((data) => {
           this.notifications = data;
-          console.log(this.notifications);
           let keys = Object.keys(data);
           for (let i = 0; i < keys.length; i++) {
             let val = data[keys[i]];
             this.notification_length = val.length;
           }
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     deleteNotif(notifId) {
-      console.log(notifId);
       const option = {
         method: "DELETE",
         credentials: "include",
@@ -333,10 +320,8 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
+          this.data = data
           this.getNotif();
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
   },

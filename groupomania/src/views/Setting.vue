@@ -38,7 +38,7 @@
           <h6 class="mt-2 text-sm font-medium" v-if="user_info.isadmin == 1">
             Admin
           </h6>
-
+          <p class="text-gray-500 text-center mt-3">{{ user_info.email }}</p>
           <p class="text-xs text-gray-500 text-center mt-3">
             {{ user_info.outline }}
           </p>
@@ -322,8 +322,6 @@ export default {
   },
   methods: {
     changeOutline(userId) {
-      console.log(this.outline);
-
       const option = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -336,11 +334,9 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
           this.outline = "";
           this.getCurrentUser();
           if (data.error) {
-            console.log(data.error);
             this.outline = "";
           }
         });
@@ -350,7 +346,6 @@ export default {
       this.image = event.target.files[0];
     },
     changePicture(userId) {
-      console.log(userId);
       const formData = new FormData();
       formData.append("image", this.image);
 
@@ -365,12 +360,10 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
           this.sucess = true;
           this.image = "";
           this.getCurrentUser();
           if (data.error) {
-            console.log(data.error);
             this.image = "";
           }
         });
@@ -388,9 +381,7 @@ export default {
         .then((data) => {
           console.log(data);
           this.$router.push("/");
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
     getCurrentUser() {
@@ -413,21 +404,13 @@ export default {
             })
             .then((data) => {
               this.user_info = data;
-              console.log(this.user_info);
-              if (data.error) {
-                console.log(data.error);
-              }
             });
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     passwordValidate() {
       this.newPass_error = "";
       const { newPass } = this;
       if (!validator.isStrongPassword(newPass)) {
-        console.log("érreur");
         this.newPass_error =
           "Le mot de passe doit contenir 8 caractères, 1 majuscule,1 minuscule et 1 caracatére spéciale";
         this.newPass = "";
@@ -457,7 +440,6 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
           this.oldPass = "";
           this.newPass = "";
           if (data.error) {

@@ -300,6 +300,7 @@ export default {
       user: [],
       userId: "",
       isAdmin: "",
+      data: [],
     };
   },
   components: {
@@ -328,10 +329,6 @@ export default {
           })
           .then((data) => {
             this.users = data;
-            console.log(this.users);
-            if (data.error) {
-              console.log(data.error);
-            }
           });
       }
     },
@@ -348,11 +345,7 @@ export default {
         })
         .then((data) => {
           this.user = data;
-          console.log(this.user);
           this.isAdmin = this.user.isAdmin
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     GetPostUser(userId) {
@@ -368,17 +361,12 @@ export default {
           })
 
           .then((data) => {
-            console.log(data);
             this.posts = data.posts;
             this.userId = userId;
-            if (data.error) {
-              console.log(data.error);
-            }
           });
       }
     },
     deletePost(postId) {
-      console.log(postId);
       const option = {
         method: "DELETE",
         credentials: "include",
@@ -389,11 +377,8 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.GetPostUser(this.userId);
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     Like(postId, like) {
@@ -409,15 +394,12 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
+          this.data = data
           this.GetPostUser(this.userId);
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
     addComment(postId) {
-      console.log(this.comment);
-      console.log(postId);
       const option = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -430,16 +412,13 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.GetPostUser(this.userId);
           this.comment = "";
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
     deleteComment(commentId) {
-      console.log(commentId);
       const option = {
         method: "DELETE",
         credentials: "include",
@@ -450,15 +429,11 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.GetPostUser(this.userId);
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     admin(userId) {
-      console.log(userId);
       const option = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -471,17 +446,14 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.GetPostUser(this.userId);
           this.comment = "";
           alert("Cet utilisateur devient admin");
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
     Notadmin(userId) {
-      console.log(userId);
       const option = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -494,13 +466,10 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.GetPostUser(this.userId);
           this.comment = "";
           alert("Cet utilisateur n'est plus admin");
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
   },

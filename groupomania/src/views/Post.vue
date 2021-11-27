@@ -186,7 +186,6 @@ export default {
     },
     createPost() {
       this.post_error = "";
-      console.log(this.image);
       const formData = new FormData();
       formData.append("content", this.title);
       formData.append("image", this.image);
@@ -202,10 +201,8 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
           this.formReset();
           if (data.error) {
-            console.log(data.error);
             this.post_error = data.error;
           } else {
             this.sucess = true;

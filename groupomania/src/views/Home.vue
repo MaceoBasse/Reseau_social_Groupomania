@@ -47,8 +47,8 @@
               <div class="author flex items-center -ml-3 my-3">
                 <div class="user-logo">
                   <img
-                    v-if="this.user.pictureUrl !== null"
-                    :src="this.user.pictureUrl"
+                    v-if="post.userPicture !== null"
+                    :src="post.userPicture"
                     alt="Photo de profil"
                     class="
                       h-8
@@ -57,6 +57,8 @@
                       rounded-full
                       box-content
                       border-2 border-gray-400
+                      mr-1
+                      ml-1
                     "
                   />
                   <i
@@ -252,6 +254,7 @@ export default {
       search: ref(""),
       postId: "",
       comment: "",
+      data: []
     };
   },
   components: {
@@ -272,10 +275,6 @@ export default {
         })
         .then((data) => {
           this.user = data;
-          console.log(this.user);
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     getAllPost() {
@@ -291,10 +290,7 @@ export default {
         })
         .then((data) => {
           this.posts = data.posts;
-          console.log(this.posts);
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
     Like(postId, like) {
@@ -310,15 +306,12 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
+          this.data = data
           this.getAllPost();
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
     addComment(postId) {
-      console.log(this.comment);
-      console.log(postId);
       const option = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -331,17 +324,13 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.comment = "";
           this.getAllPost();
           this.comment = "";
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     deleteComment(commentId) {
-      console.log(commentId);
       const option = {
         method: "DELETE",
         credentials: "include",
@@ -352,15 +341,11 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.getAllPost();
-          if (data.error) {
-            console.log(data.error);
-          }
         });
     },
     deletePost(postId) {
-      console.log(postId);
       const option = {
         method: "DELETE",
         credentials: "include",
@@ -371,11 +356,9 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
+          this.data = data
           this.getAllPost();
-          if (data.error) {
-            console.log(data.error);
-          }
+
         });
     },
   },

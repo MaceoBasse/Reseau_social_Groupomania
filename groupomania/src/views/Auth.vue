@@ -107,7 +107,6 @@
 <script>
 import validator from "validator";
 export default {
-  // name: "App",
   data() {
     return {
       //login
@@ -135,13 +134,11 @@ export default {
       this.pass_error = "";
       const { email, pass } = this;
       if (!validator.isEmail(email)) {
-        console.log("Email n'est pas valide");
         this.email_error = "L'email n'est pas valide";
         this.email = "";
         return false;
       }
       if (!validator.isStrongPassword(pass)) {
-        console.log("Le password n'est pas valide");
         this.pass_error = "Le password n'est pas valide";
         this.pass = "";
         return false;
@@ -160,7 +157,7 @@ export default {
         return false;
       }
       if (!validator.isStrongPassword(password)) {
-        this.password_error = "Password n'est pas valide";
+        this.password_error = "Le mot de passe doit contenir 8 caractères, 1 majuscule,1 minuscule et 1 caracatére spéciale";
         this.password = "";
         return false;
       }
@@ -194,7 +191,6 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
           this.$router.push("home");
 
           if (data.error) {
@@ -222,7 +218,6 @@ export default {
           console.error("There was an error!", error);
         })
         .then((data) => {
-          console.log(data);
           const options = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -238,12 +233,9 @@ export default {
               console.error("There was an error!", error);
             })
             .then((data) => {
-              console.log(data);
+              this.data = data
               this.$router.push("home");
 
-              if (data.error) {
-                console.log(data.error);
-              }
             });
 
           if (data.error) {
@@ -265,7 +257,6 @@ export default {
         .then((data) => {
           this.$router.push("home");
           if (data.error) {
-            console.log(data.error);
             this.$router.push("/");
           }
         });
