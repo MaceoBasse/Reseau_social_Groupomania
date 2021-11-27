@@ -13,9 +13,6 @@ function guardMyroute(to, from, next) {
   };
   fetch("http://localhost:3000/api/user/isauth", option)
     .then((response) => response.json())
-    .catch((error) => {
-      console.error("There was an error!", error);
-    })
     .then((data) => {
       next();
       if (data.error) {
