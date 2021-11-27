@@ -2,7 +2,7 @@ require('dotenv').config();
 const Cookies = require('cookies');
 const cryptojs = require('crypto-js');
 const database = require('../utils/database');
-
+const fs = require('fs');
 /**
  * Ajout d'une nouvelle publication
  */
@@ -182,6 +182,26 @@ exports.deletePost = (req, res, next) => {
   const postId = parseInt(req.params.id, 10);
   const sql = "DELETE FROM Posts WHERE id=?;";
   const sqlParams = [postId];
+
+
+  //delete image
+    connection.query(
+    "SELECT Posts.id AS postId, Posts.publication_date AS postDate, Posts.imageurl AS postImage, Posts.content as postContent, Users.id AS userId, Users.name AS userName, Users.pictureurl AS userPicture\
+    FROM Posts\
+    INNER JOIN Users ON Posts.user_id = Users.id\
+    WHERE Posts.id = ?\
+    ORDER BY postDate DESC",
+    [req.params.id],
+    function (error, results, fields) {
+      if (error) res.status(500).json({ error: error });
+      imageUrl = results[0].postImage;
+      const filename = imageUrl.split("/images/")[1];
+      console.log(filename);
+      fs.unlinkSync(`images/${filename}`);
+    }
+  );
+
+
   connection.execute(sql, sqlParams, (error, results, fields) => {
     if (error) {
       res.status(500).json({ "error": error.sqlMessage });
